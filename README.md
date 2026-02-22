@@ -11,12 +11,11 @@ A [RuneLite](https://runelite.net/) plugin that displays a **pie-timer circle** 
 - **Active fishing indicator** — circle turns green when you're fishing at a spot
 - **Newest spot badge** — gold star marks the most recently spawned spot (least likely to move)
 - **Timer text** showing elapsed time per spot
-- **Fish ignore filter** — comma-separated list of fish names; spots where all fish are ignored are hidden entirely
-- **Fish sprite icons** — optional item sprite rendered on each spot
-- **Minimap dots** — optional colored dots on the minimap for tracked spots
+- **Timer persistence** — remembers spot timers when you walk out of range and restores them when you return
+- **Per-spot-type tick ranges** — accurate timers for standard spots, aerial fishing, minnows, sacred/infernal eels, anglerfish, and more
 - **Idle notification** — alerts you when you stop fishing
-- **Timer persistence** — remembers spot timers when you walk out of range and return
-- **Per-fish-type timers** — accurate tick ranges for standard spots, aerial fishing, minnows, sacred/infernal eels, anglerfish, and more
+- **Fish sprite icons** — optional item sprite rendered on each spot
+- **Spot deduplication** — multiple NPCs on the same tile only render one overlay
 
 ## Configuration
 
@@ -39,22 +38,6 @@ A [RuneLite](https://runelite.net/) plugin that displays a **pie-timer circle** 
 | Show Spot Name | Off | Fish name label below each spot |
 | Show Fish Icon | Off | Item sprite on each spot |
 | Show Newest Spot Badge | On | Gold star on the newest spot |
-
-### Filtering
-| Option | Default | Description |
-|--------|---------|-------------|
-| Show Static Spots | Off | Show spots that never move (Karambwan, Tempoross, etc.) |
-| Ignored Fish | *(empty)* | Comma-separated fish names to hide (e.g. `Shrimp, Tuna`). Spots where all fish are ignored are hidden entirely. |
-
-### Notifications
-| Option | Default | Description |
-|--------|---------|-------------|
-| Idle Notification | Off | System notification when you stop fishing |
-
-### Minimap
-| Option | Default | Description |
-|--------|---------|-------------|
-| Show Minimap Dots | Off | Colored dots on the minimap for each tracked spot |
 
 ## Building
 
