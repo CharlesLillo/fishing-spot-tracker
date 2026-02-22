@@ -28,7 +28,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
@@ -93,7 +92,6 @@ public class FishingSpotTrackerOverlay extends Overlay
 		}
 
 		NPC newestSpot = config.showNewestBadge() ? plugin.getNewestSpot() : null;
-		FishingSpotData currentType = plugin.getCurrentFishingType();
 
 		// Parse ignored fish list once per frame
 		Set<String> ignoredFish = parseIgnoredFish(config.ignoredFish());
@@ -120,15 +118,15 @@ public class FishingSpotTrackerOverlay extends Overlay
 				continue;
 			}
 
-			// Filter: only current fish type
-			if (config.onlyCurrentType() && currentType != null && spotData != currentType)
+			// Deduplication
+			WorldPoint wp = npc.getWorldLocation();
+			if (!renderedTiles.add(wp))
 			{
 				continue;
 			}
 
-			// Deduplication
-			WorldPoint wp = npc.getWorldLocation();
-			if (!renderedTiles.add(wp))
+			// Filter: skip spot entirely if all its fish are ignored
+			if (!ignoredFish.isEmpty() && spotData.getDisplayFish(ignoredFish) == null)
 			{
 				continue;
 			}
@@ -158,17 +156,10 @@ public class FishingSpotTrackerOverlay extends Overlay
 		int alpha = Math.max(0, Math.min(255, config.circleOpacity()));
 		Color strokeColor = new Color(baseColor.getRed(), baseColor.getGreen(), baseColor.getBlue(), alpha);
 
-		// Render highlight (circle or tile polygon)
+		// Render pie-timer circle
 		if (config.showCircle())
 		{
-			if (config.renderStyle() == RenderStyle.TILE)
-			{
-				renderTileHighlight(graphics, npc, strokeColor, alpha, baseColor);
-			}
-			else
-			{
-				renderCircleHighlight(graphics, npc, strokeColor, alpha, baseColor, progress);
-			}
+			renderCircleHighlight(graphics, npc, strokeColor, alpha, baseColor, progress);
 		}
 
 		// Position for text elements — use canvas text location
@@ -187,7 +178,7 @@ public class FishingSpotTrackerOverlay extends Overlay
 			if (spawnTick != null)
 			{
 				int elapsedTicks = plugin.getClient().getTickCount() - spawnTick;
-				int elapsedSeconds = (int) (elapsedTicks * 0.6);
+				int elapsedSeconds = elapsedTicks * 600 / 1000;
 				int minutes = elapsedSeconds / 60;
 				int seconds = elapsedSeconds % 60;
 
@@ -254,29 +245,6 @@ public class FishingSpotTrackerOverlay extends Overlay
 				}
 			}
 		}
-	}
-
-	private void renderTileHighlight(Graphics2D graphics, NPC npc, Color strokeColor,
-		int alpha, Color baseColor)
-	{
-		Polygon tilePoly = npc.getCanvasTilePoly();
-		if (tilePoly == null)
-		{
-			return;
-		}
-
-		if (config.fillCircle())
-		{
-			int fillAlpha = Math.max(0, alpha / 3);
-			Color fillColor = new Color(baseColor.getRed(), baseColor.getGreen(),
-				baseColor.getBlue(), fillAlpha);
-			graphics.setColor(fillColor);
-			graphics.fill(tilePoly);
-		}
-
-		graphics.setColor(strokeColor);
-		graphics.setStroke(new BasicStroke(config.strokeWidth()));
-		graphics.draw(tilePoly);
 	}
 
 	private void renderCircleHighlight(Graphics2D graphics, NPC npc, Color strokeColor,

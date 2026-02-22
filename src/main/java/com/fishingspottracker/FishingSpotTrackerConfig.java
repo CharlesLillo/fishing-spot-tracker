@@ -104,22 +104,10 @@ public interface FishingSpotTrackerConfig extends Config
 	String displaySection = "display";
 
 	@ConfigItem(
-		keyName = "spotRenderStyle",
-		name = "Render Style",
-		description = "How to highlight fishing spots",
-		position = 0,
-		section = displaySection
-	)
-	default RenderStyle renderStyle()
-	{
-		return RenderStyle.CIRCLE;
-	}
-
-	@ConfigItem(
 		keyName = "showCircleOverlay",
 		name = "Show Circle",
-		description = "Draw the circle overlay around fishing spots",
-		position = 1,
+		description = "Draw the pie-timer circle overlay around fishing spots",
+		position = 0,
 		section = displaySection
 	)
 	default boolean showCircle()
@@ -130,8 +118,8 @@ public interface FishingSpotTrackerConfig extends Config
 	@ConfigItem(
 		keyName = "circleRadius",
 		name = "Circle Radius",
-		description = "Radius of the circle (only used in Circle render style)",
-		position = 2,
+		description = "Radius of the circle overlay",
+		position = 1,
 		section = displaySection
 	)
 	default int circleRadius()
@@ -143,7 +131,7 @@ public interface FishingSpotTrackerConfig extends Config
 		keyName = "strokeWidth",
 		name = "Stroke Width",
 		description = "Thickness of the highlight outline",
-		position = 3,
+		position = 2,
 		section = displaySection
 	)
 	default int strokeWidth()
@@ -155,7 +143,7 @@ public interface FishingSpotTrackerConfig extends Config
 		keyName = "fillCircle",
 		name = "Fill Circle",
 		description = "Whether to fill the circle with a translucent version of the color",
-		position = 4,
+		position = 3,
 		section = displaySection
 	)
 	default boolean fillCircle()
@@ -167,7 +155,7 @@ public interface FishingSpotTrackerConfig extends Config
 		keyName = "showTimer",
 		name = "Show Timer Text",
 		description = "Display elapsed time text above the fishing spot",
-		position = 5,
+		position = 4,
 		section = displaySection
 	)
 	default boolean showTimer()
@@ -178,8 +166,8 @@ public interface FishingSpotTrackerConfig extends Config
 	@ConfigItem(
 		keyName = "showSpotName",
 		name = "Show Spot Name",
-		description = "Display the fishing spot type name",
-		position = 6,
+		description = "Display the fish name below the spot",
+		position = 5,
 		section = displaySection
 	)
 	default boolean showSpotName()
@@ -191,7 +179,7 @@ public interface FishingSpotTrackerConfig extends Config
 		keyName = "showFishIcon",
 		name = "Show Fish Icon",
 		description = "Display the fish item sprite on fishing spots",
-		position = 7,
+		position = 6,
 		section = displaySection
 	)
 	default boolean showFishIcon()
@@ -203,7 +191,7 @@ public interface FishingSpotTrackerConfig extends Config
 		keyName = "showNewestBadge",
 		name = "Show Newest Spot Badge",
 		description = "Mark the most recently spawned spot (least likely to move)",
-		position = 8,
+		position = 7,
 		section = displaySection
 	)
 	default boolean showNewestBadge()
@@ -221,22 +209,10 @@ public interface FishingSpotTrackerConfig extends Config
 	String filterSection = "filtering";
 
 	@ConfigItem(
-		keyName = "onlyCurrentType",
-		name = "Only Current Fish Type",
-		description = "Only show overlays for the type of spot you are currently fishing at",
-		position = 0,
-		section = filterSection
-	)
-	default boolean onlyCurrentType()
-	{
-		return false;
-	}
-
-	@ConfigItem(
 		keyName = "showStaticSpots",
 		name = "Show Static Spots",
 		description = "Show overlays for spots that never move (Karambwan, Tempoross, etc.)",
-		position = 1,
+		position = 0,
 		section = filterSection
 	)
 	default boolean showStaticSpots()
@@ -247,8 +223,8 @@ public interface FishingSpotTrackerConfig extends Config
 	@ConfigItem(
 		keyName = "ignoredFish",
 		name = "Ignored Fish",
-		description = "Comma-separated list of fish names to hide (e.g. Shrimp, Tuna). If all fish at a spot are ignored, the icon is hidden.",
-		position = 2,
+		description = "Comma-separated list of fish names to hide (e.g. Shrimp, Tuna). Spots where all fish are ignored are hidden entirely.",
+		position = 1,
 		section = filterSection
 	)
 	default String ignoredFish()

@@ -31,7 +31,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.NPC;
@@ -104,12 +103,6 @@ public class FishingSpotTrackerPlugin extends Plugin
 	private final Map<LocationKey, CachedSpot> locationCache = new HashMap<>();
 
 	/**
-	 * The type of fishing spot the player is currently interacting with (if any).
-	 */
-	@Getter
-	private FishingSpotData currentFishingType;
-
-	/**
 	 * Whether the player was fishing on the previous tick (for idle detection).
 	 */
 	private boolean wasFishing;
@@ -134,7 +127,6 @@ public class FishingSpotTrackerPlugin extends Plugin
 		overlayManager.remove(minimapOverlay);
 		trackedSpots.clear();
 		locationCache.clear();
-		currentFishingType = null;
 		wasFishing = false;
 		cachedNewestSpot = null;
 	}
@@ -169,7 +161,6 @@ public class FishingSpotTrackerPlugin extends Plugin
 		{
 			trackedSpots.clear();
 			locationCache.clear();
-			currentFishingType = null;
 			wasFishing = false;
 			cachedNewestSpot = null;
 		}
@@ -250,37 +241,11 @@ public class FishingSpotTrackerPlugin extends Plugin
 		locationCache.entrySet().removeIf(e ->
 			currentTick - e.getValue().despawnTick > LOCATION_CACHE_EXPIRY_TICKS);
 
-		// Track what the player is currently fishing
-		updateCurrentFishingType();
-
 		// Update newest spot (sticky)
 		updateNewestSpot();
 
 		// Idle detection
 		updateIdleState();
-	}
-
-	private void updateCurrentFishingType()
-	{
-		Player localPlayer = client.getLocalPlayer();
-		if (localPlayer == null)
-		{
-			currentFishingType = null;
-			return;
-		}
-
-		Actor interacting = localPlayer.getInteracting();
-		if (interacting instanceof NPC)
-		{
-			FishingSpotData spotData = FishingSpotData.findSpot(((NPC) interacting).getId());
-			if (spotData != null)
-			{
-				currentFishingType = spotData;
-				return;
-			}
-		}
-
-		currentFishingType = null;
 	}
 
 	private void updateIdleState()

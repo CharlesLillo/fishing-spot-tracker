@@ -27,6 +27,7 @@ package com.fishingspottracker;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import javax.inject.Inject;
 import net.runelite.api.NPC;
 import net.runelite.api.Point;
@@ -60,7 +61,7 @@ public class FishingSpotMinimapOverlay extends Overlay
 			return null;
 		}
 
-		FishingSpotData currentType = plugin.getCurrentFishingType();
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		for (NPC npc : plugin.getTrackedSpots().keySet())
 		{
@@ -76,11 +77,6 @@ public class FishingSpotMinimapOverlay extends Overlay
 			}
 
 			if (spotData.isStatic() && !config.showStaticSpots())
-			{
-				continue;
-			}
-
-			if (config.onlyCurrentType() && currentType != null && spotData != currentType)
 			{
 				continue;
 			}

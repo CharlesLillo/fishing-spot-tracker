@@ -11,11 +11,10 @@ A [RuneLite](https://runelite.net/) plugin that displays a **pie-timer circle** 
 - **Active fishing indicator** — circle turns green when you're fishing at a spot
 - **Newest spot badge** — gold star marks the most recently spawned spot (least likely to move)
 - **Timer text** showing elapsed time per spot
-- **Fish ignore filter** — comma-separated list of fish to hide; the icon and name fall back to the next highest-level fish at the spot
+- **Fish ignore filter** — comma-separated list of fish names; spots where all fish are ignored are hidden entirely
 - **Fish sprite icons** — optional item sprite rendered on each spot
 - **Minimap dots** — optional colored dots on the minimap for tracked spots
 - **Idle notification** — alerts you when you stop fishing
-- **Tile polygon mode** — alternative render style using the tile outline instead of a floating circle
 - **Timer persistence** — remembers spot timers when you walk out of range and return
 - **Per-fish-type timers** — accurate tick ranges for standard spots, aerial fishing, minnows, sacred/infernal eels, anglerfish, and more
 
@@ -32,8 +31,7 @@ A [RuneLite](https://runelite.net/) plugin that displays a **pie-timer circle** 
 ### Display
 | Option | Default | Description |
 |--------|---------|-------------|
-| Render Style | Circle | Circle (floating pie-timer) or Tile Polygon |
-| Show Circle | On | Toggle the circle/tile overlay |
+| Show Circle | On | Toggle the pie-timer circle overlay |
 | Circle Radius | 18 | Size of the circle in pixels |
 | Stroke Width | 2 | Outline thickness |
 | Fill Circle | On | Fill the circle with a translucent color |
@@ -45,9 +43,8 @@ A [RuneLite](https://runelite.net/) plugin that displays a **pie-timer circle** 
 ### Filtering
 | Option | Default | Description |
 |--------|---------|-------------|
-| Only Current Fish Type | Off | Only show spots matching what you're currently fishing |
 | Show Static Spots | Off | Show spots that never move (Karambwan, Tempoross, etc.) |
-| Ignored Fish | *(empty)* | Comma-separated fish names to hide (e.g. `Shrimp, Tuna`) |
+| Ignored Fish | *(empty)* | Comma-separated fish names to hide (e.g. `Shrimp, Tuna`). Spots where all fish are ignored are hidden entirely. |
 
 ### Notifications
 | Option | Default | Description |
