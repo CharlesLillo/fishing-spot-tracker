@@ -217,6 +217,7 @@ public class FishingSpotTrackerPlugin extends Plugin
 		int currentTick = client.getTickCount();
 
 		// Detect NPCs that have teleported to a new tile (spot "moved")
+		// or exceeded their max tick lifetime (reset timer)
 		for (Map.Entry<NPC, TrackedSpot> entry : trackedSpots.entrySet())
 		{
 			NPC npc = entry.getKey();
@@ -231,6 +232,15 @@ public class FishingSpotTrackerPlugin extends Plugin
 			if (!currentPos.equals(tracked.worldPoint))
 			{
 				entry.setValue(new TrackedSpot(currentTick, currentPos));
+			}
+			else
+			{
+				FishingSpotData spotData = FishingSpotData.findSpot(npc.getId());
+				if (spotData != null && !spotData.isUnpredictable()
+					&& currentTick - tracked.spawnTick > spotData.getMaxTicks())
+				{
+					entry.setValue(new TrackedSpot(currentTick, currentPos));
+				}
 			}
 		}
 
