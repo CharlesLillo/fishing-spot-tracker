@@ -32,7 +32,9 @@ import lombok.Getter;
 /**
  * Fishing spot types with their NPC IDs, movement timers, and catchable fish.
  *
- * NPC IDs sourced from RuneLite's FishingSpot.java.
+ * NPC IDs sourced from RuneLite's FishingSpot.java
+ * (runelite-client/.../net/runelite/client/game/FishingSpot.java) and
+ * gameval NpcID.java / ItemID.java.
  * Timer data sourced from the OSRS Wiki:
  *   - Most spots: 250-530 ticks (2.5-5 min)
  *   - Aerial fishing: 10-19 ticks (~6-11 sec)
@@ -124,9 +126,10 @@ public enum FishingSpotData
 		},
 		1535, 1536
 	),
-	SQUID("Squid", 250, 530,
+	SQUID("Swordtip / Jumbo Squid", 250, 530,
 		new Fish[] {
-			new Fish("Squid", 44, 31561)
+			new Fish("Jumbo squid", 69, 31561),
+			new Fish("Swordtip squid", 52, 31553)
 		},
 		15074, 15078, 15081, 15085
 	),
