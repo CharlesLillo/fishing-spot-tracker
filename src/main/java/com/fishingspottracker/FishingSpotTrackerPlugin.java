@@ -28,9 +28,11 @@ import com.google.inject.Provides;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.NPC;
@@ -40,6 +42,7 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
+import net.runelite.api.gameval.AnimationID;
 import net.runelite.client.Notifier;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
@@ -64,12 +67,46 @@ public class FishingSpotTrackerPlugin extends Plugin
 
 	/**
 	 * Set of animation IDs that indicate the player is actively fishing.
+	 * Based on the fishing animations used by RuneLite's Idle Notifier, plus the
+	 * full barbarian hand-fishing cycle. Fish processing animations (eel
+	 * cracking, knife use) are left out because they never happen at a spot.
 	 */
-	private static final java.util.Set<Integer> FISHING_ANIMATIONS = java.util.Set.of(
-		621, 622, 623, 619, 620, 624, 625, 626, 627, 628, 629,
-		632, 633, 5108, 6703, 6704, 6706, 6707, 6708, 6709, 6710,
-		7401, 8336, 9350, 9353, 9354, 9355, 9356, 9357, 9358, 9359,
-		9360, 9361, 9362
+	private static final Set<Integer> FISHING_ANIMATIONS = Set.of(
+		// Nets, rods, cages
+		AnimationID.HUMAN_SMALLNET,
+		AnimationID.HUMAN_LARGENET,
+		AnimationID.HUMAN_LOBSTER,
+		AnimationID.HUMAN_FISHING_CASTING,
+		AnimationID.HUMAN_FISH_ONSPOT,
+		AnimationID.HUMAN_OCTOPUS_POT,
+		// Pearl rods
+		AnimationID.HUMAN_FISHING_CASTING_PEARL,
+		AnimationID.HUMAN_FISHING_CASTING_PEARL_FLY,
+		AnimationID.HUMAN_FISHING_CASTING_PEARL_BRUT,
+		AnimationID.HUMAN_FISHING_CASTING_PEARL_OILY,
+		AnimationID.HUMAN_FISH_ONSPOT_PEARL,
+		AnimationID.HUMAN_FISH_ONSPOT_PEARL_FLY,
+		AnimationID.HUMAN_FISH_ONSPOT_PEARL_BRUT,
+		// Harpoons
+		AnimationID.HUMAN_HARPOON,
+		AnimationID.HUMAN_HARPOON_BARBED,
+		AnimationID.HUMAN_HARPOON_DRAGON,
+		AnimationID.HUMAN_HARPOON_INFERNAL,
+		AnimationID.HUMAN_HARPOON_CRYSTAL,
+		AnimationID.HUMAN_HARPOON_TRAILBLAZER,
+		AnimationID.HUMAN_HARPOON_TRAILBLAZER_NO_INFERNAL,
+		AnimationID.HUMAN_HARPOON_TRAILBLAZER_RELOADED,
+		AnimationID.HUMAN_HARPOON_TRAILBLAZER_RELOADED_NO_INFERNAL,
+		AnimationID.HUMAN_HARPOON_LEAGUE_TRAILBLAZER,
+		// Barbarian fishing
+		AnimationID.HUMAN_FISHING_ONSPOT_BRUT,
+		AnimationID.BRUT_PLAYER_HAND_FISHING_START,
+		AnimationID.BRUT_PLAYER_HAND_FISHING_READY,
+		AnimationID.BRUT_PLAYER_HAND_FISHING_END_SHARK_1,
+		AnimationID.BRUT_PLAYER_HAND_FISHING_END_SWORDFISH_1,
+		AnimationID.BRUT_PLAYER_HAND_FISHING_END_SWORDFISH_2,
+		AnimationID.BRUT_PLAYER_HAND_FISHING_END_BLANK,
+		AnimationID.BRUT_PLAYER_HAND_FISHING_END_TUNA_1
 	);
 
 	@Getter
@@ -271,7 +308,10 @@ public class FishingSpotTrackerPlugin extends Plugin
 			return;
 		}
 
-		boolean isFishing = FISHING_ANIMATIONS.contains(localPlayer.getAnimation());
+		// Require both a fishing animation and an active fishing spot target, so
+		// other skilling animations can never be mistaken for fishing.
+		boolean isFishing = FISHING_ANIMATIONS.contains(localPlayer.getAnimation())
+			&& isInteractingWithFishingSpot(localPlayer);
 
 		if (wasFishing && !isFishing && config.idleNotification())
 		{
@@ -279,6 +319,12 @@ public class FishingSpotTrackerPlugin extends Plugin
 		}
 
 		wasFishing = isFishing;
+	}
+
+	private static boolean isInteractingWithFishingSpot(Player player)
+	{
+		Actor target = player.getInteracting();
+		return target instanceof NPC && FishingSpotData.findSpot(((NPC) target).getId()) != null;
 	}
 
 	/**
