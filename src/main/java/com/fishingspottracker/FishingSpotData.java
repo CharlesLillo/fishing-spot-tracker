@@ -38,10 +38,11 @@ import lombok.Getter;
  * Timer data sourced from the OSRS Wiki:
  *   - Most spots: 250-530 ticks (2.5-5 min)
  *   - Aerial fishing: 10-19 ticks (~6-11 sec)
+ *   - Frenzied aerial fishing: 28 ticks
  *   - Minnow: 12-25 ticks (~7-15 sec)
  *   - Sacred/Infernal eels: 100-300 ticks (1-3 min)
  *   - Anglerfish: 8-830 ticks (unpredictable)
- *   - Static spots (Karambwan, Tempoross, etc.): effectively never move
+ *   - Static spots (Karambwan, Tempoross, boat fishing, etc.): effectively never move
  */
 @Getter
 public enum FishingSpotData
@@ -54,7 +55,7 @@ public enum FishingSpotData
 		},
 		1514, 1517, 1518, 1521, 1523, 1524, 1525, 1528, 1530, 1544,
 		3913, 7155, 7459, 7462, 7467, 7469, 7947,
-		10513, 14038, 14040, 14041, 14524, 15066
+		10513, 12778, 14038, 14040, 14041, 14524, 15066
 	),
 	LOBSTER("Lobster / Swordfish / Tuna", 250, 530,
 		new Fish[] {
@@ -65,7 +66,7 @@ public enum FishingSpotData
 		1510, 1519, 1522, 2146, 3914, 5820,
 		7199, 7460, 7465, 7470, 7946,
 		9173, 9174, 10515, 10635, 12777, 14039,
-		15070, 15071, 15075, 15076, 15079, 15084, 15086
+		15070, 15071, 15075, 15076, 15079, 15084, 15086, 16336
 	),
 	SHARK("Shark / Bass", 250, 530,
 		new Fish[] {
@@ -75,7 +76,7 @@ public enum FishingSpotData
 		1511, 1520, 3419, 3915, 4476, 4477, 5233, 5234, 5821,
 		7200, 7461, 7466, 8525, 8526, 8527,
 		9171, 9172, 10514, 12775, 12776, 14037, 14523,
-		15067, 15068, 15069, 15077, 15080, 15082, 15083, 15087
+		15067, 15068, 15069, 15077, 15080, 15082, 15083, 15087, 16335
 	),
 	MONKFISH("Monkfish", 250, 530,
 		new Fish[] {
@@ -98,7 +99,7 @@ public enum FishingSpotData
 		new Fish[] {
 			new Fish("Lava Eel", 53, 2148)
 		},
-		4928, 6784, 15384
+		4928, 6784, 15384, 16337
 	),
 	BARB_FISH("Barbarian Fishing", 250, 530,
 		new Fish[] {
@@ -164,6 +165,15 @@ public enum FishingSpotData
 		},
 		8523
 	),
+	FRENZIED_AERIAL("Frenzied Aerial Fishing", 28, 28,
+		new Fish[] {
+			new Fish("Greater Siren", 91, 22827),
+			new Fish("Mottled Eel", 68, 22828),
+			new Fish("Common Tench", 56, 22829),
+			new Fish("Bluegill", 43, 22826)
+		},
+		16346
+	),
 	MINNOW("Minnow", 12, 25,
 		new Fish[] {
 			new Fish("Minnow", 82, 21356)
@@ -209,6 +219,48 @@ public enum FishingSpotData
 			new Fish("Harpoonfish", 35, 25564)
 		},
 		10565, 10568, 10569
+	),
+
+	// ── Boat fishing spots (Sailing, fished from a boat; never move) ───
+	BOAT_SHRIMP("Boat: Shrimp / Anchovies", 10000, 10000,
+		new Fish[] {
+			new Fish("Anchovies", 15, 321),
+			new Fish("Shrimp", 1, 317)
+		},
+		16338
+	),
+	BOAT_SHARK("Boat: Shark / Bass", 10000, 10000,
+		new Fish[] {
+			new Fish("Shark", 76, 383),
+			new Fish("Bass", 46, 363)
+		},
+		16339
+	),
+	BOAT_LOBSTER("Boat: Lobster / Swordfish / Tuna", 10000, 10000,
+		new Fish[] {
+			new Fish("Swordfish", 50, 373),
+			new Fish("Lobster", 40, 377),
+			new Fish("Tuna", 35, 359)
+		},
+		16340
+	),
+	BOAT_KARAMBWAN("Boat: Karambwan", 10000, 10000,
+		new Fish[] {
+			new Fish("Karambwan", 65, 3142)
+		},
+		16341
+	),
+	BOAT_ANGLERFISH("Boat: Anglerfish", 10000, 10000,
+		new Fish[] {
+			new Fish("Anglerfish", 82, 13439)
+		},
+		16342
+	),
+	BOAT_MONKFISH("Boat: Monkfish", 10000, 10000,
+		new Fish[] {
+			new Fish("Monkfish", 62, 7944)
+		},
+		16343
 	);
 
 	static final int DEFAULT_MAX_TICKS = 530;
